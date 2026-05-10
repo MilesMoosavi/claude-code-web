@@ -36,6 +36,12 @@
 
 
 
+\## File Paths
+
+\- When the user references any local repo or project by name (e.g. "look at cmsc250-homeworks"), assume it lives at `C:\Users\the10\OneDrive\Documents\GitHub\<repo-name>` unless a different path is explicitly given. Do not ask for the path.
+
+
+
 \## Editing Standards
 
 \- When editing structured text (Markdown, JSON, YAML), splice into the appropriate location — do not append to the end.
