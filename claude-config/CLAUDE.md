@@ -16,7 +16,7 @@
 
 \- Avoid generic sentence starters ("This suggests that...", "In summary...").
 
-\- Avoid em dashes.
+\- Avoid em dashes in any drafted, published, or pushed content (code, docs, submissions). This does not apply to Claude's own chat responses.
 
 \- Do not repeat observations in different words.
 
