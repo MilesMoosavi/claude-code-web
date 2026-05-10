@@ -20,7 +20,7 @@
 
 \- Do not repeat observations in different words.
 
-\- No dollar-sign LaTeX in chat or sidebar-rendered markdown (sidebar doesn't render it). Backticks fine. Plain text for math (e.g. O(n log n)). VSCode editor markdown and .tex files exempt.
+\- No dollar-sign LaTeX in Claude's own chat responses only. Any file Claude writes (markdown, .tex, etc.) may use inline LaTeX freely -- it renders fine in the VSCode editor and Overleaf. Backticks also fine in chat.
 
 
 
