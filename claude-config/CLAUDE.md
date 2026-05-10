@@ -20,7 +20,7 @@
 
 \- Do not repeat observations in different words.
 
-\- Never use inline LaTeX dollar-sign notation (e.g. $O(n)$, $\log n$) in chat responses or in markdown files intended to be read in the Claude Code VSCode sidebar. The sidebar does not render it. Markdown files opened directly in the VSCode editor render fine. .tex files are always exempt. Use plain text equivalents in chat (e.g. O(n log n), O(log n)). This applies until further notice.
+\- Never use inline LaTeX dollar-sign notation (e.g. $O(n)$, $\log n$) in chat responses or in markdown files intended to be read in the Claude Code VSCode sidebar. The sidebar does not render it. Markdown files opened directly in the VSCode editor render fine. .tex files are always exempt. Use plain text equivalents in chat (e.g. O(n log n), O(log n)). Backtick inline code (e.g. `O(n log n)`) is fine and renders correctly. This applies until further notice.
 
 
 
