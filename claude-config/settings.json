@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(curl -s http://localhost:11434/api/tags)",
+      "Bash(ollama list:*)",
+      "Bash(ollama pull:*)",
+      "WebSearch",
+      "Bash(node src/scripts/generate-summary.js 427)",
+      "Bash(npm run:*)",
+      "Bash(npx tsc *)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:cdn.jsdelivr.net)",
+      "Bash(python3 -c ' *)",
+      "Bash(python3 \"Project Mosaic/mosaic_filter_test.py\")",
+      "Bash(python3 \"Project Mosaic/claude_processor.py\")"
+    ]
+  },
+  "enabledPlugins": {
+    "commit-commands@claude-plugins-official": true,
+    "security-guidance@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true
+  },
+  "effortLevel": "medium",
+  "autoMemoryEnabled": true
+}
