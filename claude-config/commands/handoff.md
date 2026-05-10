@@ -1,19 +1,28 @@
 ---
-description: Preserve task state across context boundaries — write a session handoff file or export a structured prompt for another agent.
-argument-hint: [resume|export]
+description: Preserve session state across context boundaries to kill hallucinations and continue seamlessly. Detects whether the next session should resume a specific task or simply stand by for instructions.
+argument-hint: [resume|export|continue]
 allowed-tools: [Read, Write, Glob, Grep, Bash]
 ---
 
 # Session Handoff
 
-Preserve task state when the context window is full or you need to hand off to another model/tool.
+Use when the context window is getting long enough that hallucinations are creeping in, or when explicitly switching to a fresh session. The goal is maximum continuity with minimum re-orientation cost.
 
-## Mode Selection
+## Arguments
 
 The user invoked this with: $ARGUMENTS
 
-- **resume** (default): Write state to `.agents/session_handoff.md` in the current project root for same-model continuation.
-- **export**: Output a structured prompt to the chat for the user to copy into another tool (Gemini, Cursor, Copilot, etc.).
+- **resume** (default): Write state to `.agents/session_handoff.md` in the current project root. Next session reads it and waits for further instructions.
+- **continue**: Same as resume, but signals to the next session that a specific task is mid-flight and should be picked up immediately without waiting.
+- **export**: Output a structured prompt as a copyable code block for pasting into another tool (Gemini, Cursor, Copilot, Codex, etc.).
+
+## Mode Detection
+
+Before writing the handoff, infer the user's intent:
+
+- If the user says "continue [task]", "pick up where we left off", "keep going", or references a specific in-progress task → use **continue** mode.
+- If the user says "start fresh", "new session", "clean slate", or doesn't reference a specific next task → use **resume** mode (stand-by on arrival).
+- If ambiguous, ask: "Should the next session pick up a specific task, or stand by for your instructions?"
 
 ## Handoff Structure
 
@@ -21,25 +30,33 @@ Produce all of the following sections:
 
 **Timestamp**: ISO-8601 timestamp.
 
-**Current Objective**: The core goal right now and any active blockers.
+**Session Mode**: `continue` or `stand-by`. If `continue`, state exactly what task to resume immediately. If `stand-by`, instruct the next session to read this file, acknowledge it, then wait.
 
-**Active Files**: Exact paths currently in scope — code files, specs, configs.
+**Current Objective**: The core goal at time of handoff, and any active blockers.
 
-**Environmental State**: Any running servers, active venvs, background processes.
+**Active Files**: Exact paths currently in scope — code files, notes, configs, exams, etc.
 
-**Last Working State**: The most recent thing that worked correctly before the current issue.
+**Session Context**: Key facts established this session that won't be in the next session's memory — decisions made, answers confirmed, approaches ruled out. Be specific; this is the main anti-hallucination payload.
 
-**Failed Approaches**: Every strategy tried and why it failed. Explicitly flag if stuck in a logic loop.
+**Environmental State**: Any running servers, active venvs, background processes, or open tools.
 
-**Captured User Intent**: Verbatim text of the user's most recent request. This is the absolute priority for the next session.
+**Last Working State**: The most recent thing confirmed correct before this handoff.
 
-**Recommendation**: Specific next steps for the next model, including a targeted grep path or directory focus to avoid surface-level re-analysis.
+**Failed Approaches**: Every strategy tried and why it failed. Flag explicitly if stuck in a logic loop.
 
-**Workflow Delta**: Any new or modified global workflows active in this session.
+**Captured User Intent**: Verbatim text of the user's most recent substantive request. Absolute priority for the next session.
+
+**Recommendation**: Specific next steps, including targeted file paths or grep patterns. Avoid generic re-analysis.
+
+**Workflow Delta**: Any new or modified global workflows, commands, or rules activated this session that the next session needs to know about.
+
+**Primer**: A short (3-5 sentence) behavioral primer the next session should apply immediately — tone, mode, constraints. E.g., if this session was Socratic study mode, say so explicitly so the next session doesn't revert to default behavior.
 
 ## Rules
 
-- For **resume** mode: write the handoff to `.agents/session_handoff.md`, creating the `.agents/` directory if it doesn't exist.
-- For **export** mode: output the handoff as a clean code block the user can paste elsewhere.
-- Always remind the next agent to sync platform rules against `~/.claude/CLAUDE.md` (or `~/.gemini/GEMINI.md` if handing off to Gemini).
-- Record the exact user message that triggered this handoff under Captured User Intent — do not paraphrase.
+- **resume** mode: write to `.agents/session_handoff.md`, creating `.agents/` if it doesn't exist.
+- **continue** mode: same file, but prepend `ACTION REQUIRED: resume [task] immediately after reading.`
+- **export** mode: output as a clean fenced code block for copy-paste.
+- Always instruct the next session to read `~/.claude/CLAUDE.md` and check `~/.claude/commands/` on arrival.
+- Do not paraphrase Captured User Intent — quote verbatim.
+- The handoff is a makeshift fix, not a perfect memory transfer. Flag anything the user may still need to re-confirm in the new session.
