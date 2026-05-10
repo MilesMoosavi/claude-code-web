@@ -16,6 +16,8 @@ The user invoked this with: $ARGUMENTS
 - **continue**: Same as resume, but signals to the next session that a specific task is mid-flight and should be picked up immediately without waiting.
 - **export**: Output a structured prompt as a copyable code block for pasting into another tool (Gemini, Cursor, Copilot, Codex, etc.).
 
+The user may also pass a **session title** as a free-form string (e.g., `/handoff continue "CMSC451 Final Exam Prep (pt. 3)"`). If provided, use it verbatim. If not provided, generate one following the Title Generation rules below.
+
 ## Mode Detection
 
 Before writing the handoff, infer the user's intent:
@@ -24,9 +26,22 @@ Before writing the handoff, infer the user's intent:
 - If the user says "start fresh", "new session", "clean slate", or doesn't reference a specific next task → use **resume** mode (stand-by on arrival).
 - If ambiguous, ask: "Should the next session pick up a specific task, or stand by for your instructions?"
 
+## Title Generation
+
+If the user did not specify a title, generate one that reflects the **expected scope of the next session**, not just the immediate trigger task.
+
+Rules:
+- Think about what the user will likely work through in the next session, not just what they're doing right now.
+- If this is part of an ongoing series (e.g. study prep, a multi-session project), increment a part number (e.g. `pt. 3`).
+- Format: `<Project/Topic> (<qualifier>)` — e.g. `CMSC451 Final Exam Prep (pt. 3)`, `Semantix Refactor (auth flow)`, `claude-code-web Setup (cont.)`.
+- Lean broad rather than narrow. A session titled after Q4(a) that ends up covering Q4-Q6 is worse than one titled for the exam prep arc.
+- Output the suggested title at the top of the handoff and in the chat so the user can confirm or override it before starting the new session.
+
 ## Handoff Structure
 
 Produce all of the following sections:
+
+**Suggested Title**: The name for the next conversation. User-specified if provided, otherwise generated per Title Generation rules above.
 
 **Timestamp**: ISO-8601 timestamp.
 
