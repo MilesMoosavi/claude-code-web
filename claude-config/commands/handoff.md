@@ -73,5 +73,6 @@ Produce all of the following sections:
 - **continue** mode: same file, but prepend `ACTION REQUIRED: resume [task] immediately after reading.`
 - **export** mode: output as a clean fenced code block for copy-paste.
 - Always instruct the next session to read `~/.claude/CLAUDE.md` and check `~/.claude/commands/` on arrival.
+- If `.agents/session_primer.md` exists in the current repo, include its contents verbatim in the handoff under a **Behavioral Primer** section, and instruct the next session to apply it immediately.
 - Do not paraphrase Captured User Intent — quote verbatim.
 - The handoff is a makeshift fix, not a perfect memory transfer. Flag anything the user may still need to re-confirm in the new session.
