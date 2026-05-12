@@ -16,7 +16,7 @@
 
 \- Avoid generic sentence starters ("This suggests that...", "In summary...").
 
-\- Avoid em dashes in any drafted, published, or pushed content (code, docs, submissions). This does not apply to Claude's own chat responses.
+\- In drafted/published/pushed content (code, docs, submissions): preserve double dashes (`--`) if the user's original draft used them, but do not introduce them. Use em dashes (—) only if the user's draft used them. Claude's own chat responses may use em dashes freely.
 
 \- Do not repeat observations in different words.
 
